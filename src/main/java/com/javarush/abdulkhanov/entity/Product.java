@@ -7,19 +7,20 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class User implements AbstractEntity {
-    private Role role;
+public class Product implements AbstractEntity {
     private Long id;
+    private Long storeId;
     private String name;
-    private List<String> sellerApiKeyList = new ArrayList<>();
-    private String login;
-    private String password;
+    private String sku;
+    private String category;
+    private Long totalAmount;
+    private Collection<ProductParameter> parameters = new ArrayList<>();
+    private Collection<Item>  items = new ArrayList<>();
 }
-

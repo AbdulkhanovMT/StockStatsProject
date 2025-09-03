@@ -1,6 +1,9 @@
 package com.javarush.abdulkhanov.controller;
 
 import com.javarush.abdulkhanov.cmd.Command;
+import com.javarush.abdulkhanov.config.Config;
+import com.javarush.abdulkhanov.config.ServiceLocator;
+import com.javarush.abdulkhanov.entity.Role;
 import com.javarush.abdulkhanov.utils.Address;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletContext;
@@ -16,9 +19,17 @@ import java.io.IOException;
 @MultipartConfig(fileSizeThreshold = 1 << 20)
 @WebServlet({Address.START, Address.CARD, Address.CREATE,
         Address.INDEX, Address.EDIT_USER, Address.LIST_USER,
-        Address.OPEN_CARD, Address.PROFILE, Address.LOGIN,
+        Address.STORE, Address.PROFILE, Address.LOGIN,
         Address.LOGOUT, Address.SIGNUP, Address.STAT})
 public class InitialPageServlet extends HttpServlet {
+    @Override
+    public void init(ServletConfig servletConfig) throws ServletException {
+        Config config = ServiceLocator.find(Config.class);
+        config.fillEmptyRepositories();
+
+        ServletContext servletContext = servletConfig.getServletContext();
+        servletContext.setAttribute("roles", Role.values());
+    }
 
     private final CommandIdentifier commandIdentifier = new CommandIdentifier();
 

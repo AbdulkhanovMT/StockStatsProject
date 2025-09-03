@@ -11,8 +11,8 @@ public class Address {
     public static final String LIST_USER = "/list-user";
     public static final String EDIT_USER = "/edit-user";
 
-    public static final String CREATE = "/create-card";
-    public static final String CARD = "/card";
+    public static final String CREATE = "/create-product";
+    public static final String CARD = "/product";
     public static final String STAT = "/stat";
-    public static final String OPEN_CARD = "/open-card";
+    public static final String STORE = "/store";
 }
