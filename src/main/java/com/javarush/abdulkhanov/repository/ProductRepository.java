@@ -10,9 +10,7 @@ public class ProductRepository extends AbstractRepository<Product> {
     @Override
     public Stream<Product> find(Product entity) {
         return entities.values().stream()
-                .filter(product -> product.getCategory().equals(entity.getCategory()))
                 .filter(product -> Objects.equals(product.getName(), entity.getName()))
-                .filter(product -> Objects.equals(product.getStoreId(), entity.getStoreId()))
                 .filter(product -> Objects.equals(product.getSku(), entity.getSku()));
     }
 }

@@ -1,6 +1,5 @@
 {
   "travel bag": {
-    "name" : "String",
     "price" : "Integer",
     "discount" : "Integer",
     "width" : "Integer",
@@ -16,7 +15,6 @@
     "internal compartments" : "Integer"
   },
   "backpack": {
-    "name" : "String",
     "price" : "Integer",
     "discount" : "Integer",
     "width" : "Integer",
@@ -32,7 +30,6 @@
     "anatomical back" : "Boolean"
   },
   "suitcase": {
-    "name" : "String",
     "price" : "Integer",
     "discount" : "Integer",
     "width" : "Integer",
@@ -48,7 +45,6 @@
     "solid surface" : "Boolean"
   },
   "banana bag": {
-    "name" : "String",
     "price" : "Integer",
     "discount" : "Integer",
     "width" : "Integer",
@@ -65,7 +61,6 @@
     "solid surface" : "Boolean"
   },
   "accessories": {
-    "name" : "String",
     "price" : "Integer",
     "discount" : "Integer",
     "width" : "Integer",

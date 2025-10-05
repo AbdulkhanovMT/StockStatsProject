@@ -13,12 +13,12 @@ public abstract class AbstractRepository<T extends AbstractEntity> implements Re
 
     @Override
     public Collection<T> getAll() {
-        return entities.values();
+        return entities.values().stream().toList();
     }
 
     @Override
     public T get(Long id) {
-        return null;
+        return entities.get(id);
     }
 
     @Override

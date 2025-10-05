@@ -21,12 +21,20 @@ public class Store implements AbstractEntity{
     private String accessKey;
     private List<User> userList = new ArrayList<>();
     private Collection<Order> orderList = new ArrayList<>();
-    private Collection<Product> products = new ArrayList<>();
+    private List<Product> products = new ArrayList<>();
 
-    public void setProducts(Collection<Product> products) {
+    public void setProducts(List<Product> products) {
         for (Product product : products) {
             product.setStoreId(this.getId());
         }
         this.products = products;
+    }
+
+    public void addProduct(Product product) {
+        this.products.add(product);
+    }
+
+    public String getImage(){
+        return "store-" + this.getId();
     }
 }

@@ -33,6 +33,9 @@ public class Config {
                     .stream()
                     .filter(product -> product.getSku().startsWith(getStoreAbbreviation(store.getStoreName())))
                     .toList();
+            for (Product product : products) {
+                fillProductParameters(product);
+            }
             store.setProducts(products);
         }
     }
@@ -44,6 +47,7 @@ public class Config {
         for (char character : chars) {
             if (character == chars[0] || appendNext) {
                 storeAbbreviation.append(character);
+                appendNext = false;
             }
             if (character == ' ') {
                 appendNext = true;
@@ -77,14 +81,40 @@ public class Config {
     }
 
     private void setUsers() {
-        userService.create(buildUser("Seller1", "superseller", "secret", Role.SELLER, List.of("1234")));
-        userService.create(buildUser("Seller2", "superseller", "secret", Role.SELLER, List.of("qwerty")));
-        userService.create(buildUser("Admin", "admin", "secret", Role.ADMIN, List.of("1234", "qwerty")));
+        userService.create(buildUser("Seller1", "superseller1", "secret1", Role.SELLER, List.of("1234")));
+        userService.create(buildUser("Seller2", "superseller2", "secret2", Role.SELLER, List.of("qwerty")));
+        userService.create(buildUser("Admin", "admin", "admin", Role.ADMIN, List.of("1234", "qwerty")));
         userService.create(buildUser("HumanWithoutStore", "qwerty", "1234", Role.GUEST, List.of("")));
     }
 
     private void fillProductParameters(Product product) {
+        List<ProductParameter> productParameters = (List<ProductParameter>) product.getParameters();
+        for (ProductParameter productParameter : productParameters) {
+            String productParameterName = productParameter.getName();
+            String productParameterValue = getProductParameterValue(productParameterName);
+            productParameter.setValue(productParameterValue);
+        }
+    }
 
+    private static String getProductParameterValue(String productParameterName) {
+        return switch (productParameterName) {
+            case "price" -> "100";
+            case "discount" -> "10";
+            case "width" -> "30";
+            case "length" -> "20";
+            case "height" -> "15";
+            case "weight" -> "250";
+            case "color" -> "red";
+            case "max volume" -> "40.0";
+            case "handgrips" -> "true";
+            case "shoulder strap" -> "true";
+            case "exterior pockets" -> "2";
+            case "interior pockets" -> "3";
+            case "internal compartments" -> "2";
+            case "anatomical back" -> "true";
+            case "solid surface" -> "true";
+            default -> throw new IllegalStateException("Unexpected value: " + productParameterName);
+        };
     }
 
     private Product buildProduct(String name, String sku, Long amount, String category) {
@@ -114,12 +144,12 @@ public class Config {
                 .build();
     }
 
-    private Store buildStore(String storeName, String accessKey, List<Order> orders, List<Product> products) {
-        return Store.builder()
-                .storeName(storeName)
-                .accessKey(accessKey)
-                .orderList(orders)
-                .products(products)
-                .build();
-    }
+//    private Store buildStore(String storeName, String accessKey, List<Order> orders, List<Product> products) {
+//        return Store.builder()
+//                .storeName(storeName)
+//                .accessKey(accessKey)
+//                .orderList(orders)
+//                .products(products)
+//                .build();
+//    }
 }

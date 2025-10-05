@@ -23,4 +23,8 @@ public class Product implements AbstractEntity {
     private Long totalAmount;
     private Collection<ProductParameter> parameters = new ArrayList<>();
     private Collection<Item>  items = new ArrayList<>();
+
+    public String getImage(){
+        return "product-" + this.getId();
+    }
 }

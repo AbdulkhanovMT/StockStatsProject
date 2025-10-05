@@ -21,5 +21,9 @@ public class User implements AbstractEntity {
     private List<String> sellerApiKeyList = new ArrayList<>();
     private String login;
     private String password;
+
+    public String getImage(){
+        return "user-" + this.getId();
+    }
 }
 
