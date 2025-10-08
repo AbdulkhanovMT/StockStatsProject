@@ -8,10 +8,12 @@ import com.javarush.abdulkhanov.utils.Address;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collection;
 import java.util.List;
 
+@Slf4j
 @SuppressWarnings("unused")
 @AllArgsConstructor
 public class ProductPage implements Command {
@@ -42,9 +44,11 @@ public class ProductPage implements Command {
                         }
                     }
                 }
+                log.info("Product info successfully retrieved");
                 return Address.CARD;
             }
         } else {
+            log.info("User clicked logout");
             return Address.LOGOUT;
         }
     }

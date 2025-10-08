@@ -10,11 +10,13 @@ import com.javarush.abdulkhanov.utils.AttributeKeys;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+@Slf4j
 @SuppressWarnings("unused")
 @AllArgsConstructor
 public class Profile implements Command {
@@ -28,6 +30,8 @@ public class Profile implements Command {
         User user = (User) session.getAttribute(AttributeKeys.USER);
         if (user.getRole().equals(Role.ADMIN)) {
             session.setAttribute("stores", stores);
+            log.info("All stores are available to user {}", user.getId());
+            log.info("Admin entered");
             return Address.PROFILE.substring(1);
         }
         if (request.getParameter("logout") == null) {
@@ -41,6 +45,7 @@ public class Profile implements Command {
             }
             return Address.PROFILE.substring(1);
         } else {
+            log.info("Wrong access data");
             return Address.LOGOUT.substring(1);
         }
     }

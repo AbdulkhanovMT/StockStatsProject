@@ -1,13 +1,14 @@
 package com.javarush.abdulkhanov.cmd;
 
-import com.javarush.abdulkhanov.entity.User;
 import com.javarush.abdulkhanov.service.ProductService;
 import com.javarush.abdulkhanov.service.ProductStatisticsService;
 import com.javarush.abdulkhanov.utils.Address;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @SuppressWarnings("unused")
 @AllArgsConstructor
 public class ProductList implements Command {

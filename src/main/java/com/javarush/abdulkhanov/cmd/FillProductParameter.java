@@ -11,10 +11,11 @@ import com.javarush.abdulkhanov.utils.Address;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
 
-
+@Slf4j
 @SuppressWarnings("unused")
 @AllArgsConstructor
 public class FillProductParameter implements Command {
@@ -29,15 +30,19 @@ public class FillProductParameter implements Command {
         String category = req.getParameter("category");
         List<ProductParameter> parameters = productParameterService.createListOfParameters(category);
         req.setAttribute("parameters", parameters);
+        log.info("Product parameters were created");
         String productId = req.getParameter("productId");
         if (productId != null) {
             long id = Long.parseLong(productId);
             productService.get(id)
                     .ifPresent(product -> {
+                        log.info("Product was found with id {}", product.getId());
                         req.setAttribute("product", product);
                         product.setParameters(parameters);
+                        log.info("Product parameters were set to product {}", product.getId());
                     });
         }
+        log.info("Product parameters filling page is shown");
         return getView();
     }
 
@@ -49,12 +54,14 @@ public class FillProductParameter implements Command {
         long id = Long.parseLong(stringId);
         Optional<Product> optional = productService.get(id);
         if (optional.isEmpty()) {
+            log.warn("Product not found with id {}", stringId);
             return Address.CREATE_PRODUCT;
         }
         Product product = optional.get();
         Map<String, ProductParameter> parameters = fillProductParameterMap(req, product);
         if (parameters.isEmpty()) {
             productService.delete(product);
+            log.warn("Parameters were not filled");
             return Address.CREATE_PRODUCT;
         }
         Product createdProduct = Product.builder().id(id)
@@ -65,10 +72,13 @@ public class FillProductParameter implements Command {
                 .parameters(parameters.values())
                 .build();
         productService.update(createdProduct);
+        log.info("Product {} was updated", createdProduct.getId());
         Store store = storeService.get(Long.parseLong(storeId)).get();
         List<Product> updatedList = new ArrayList<>(store.getProducts());
         updatedList.add(createdProduct);
+        log.info("Product {} was added to store {}", createdProduct.getId(), store.getId());
         store.setProducts(updatedList);
+        log.info("New product {} was created and added to store {}. Forward to the product page.", createdProduct.getId(), store.getId());
         return Address.CARD + "?productId=" + id;
     }
 

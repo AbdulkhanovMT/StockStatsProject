@@ -10,8 +10,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
-
+@Slf4j
 @SuppressWarnings("unused")
 @AllArgsConstructor
 public class EditProfile implements Command {
@@ -26,8 +27,10 @@ public class EditProfile implements Command {
             long id = Long.parseLong(stringId);
             userService.get(id)
                     .ifPresent(user -> req.setAttribute(AttributeKeys.USER, user));
+            log.info("Edit page for user {} was shown", stringId);
             return getView();
         } else{
+            log.info("Id was not provided");
             return Address.PROFILE.substring(1);
         }
 
@@ -49,6 +52,7 @@ public class EditProfile implements Command {
                 .build();
         userService.update(user);
         imageService.uploadImage(req, user.getImage());
+        log.info("New data was sent to storage");
         return getView() + "?id=" + user.getId();
     }
 }

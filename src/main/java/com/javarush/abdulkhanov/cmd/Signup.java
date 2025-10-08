@@ -10,7 +10,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @SuppressWarnings("unused")
 @AllArgsConstructor
 public class Signup implements Command {
@@ -22,6 +24,7 @@ public class Signup implements Command {
     @SneakyThrows
     public String doPost(HttpServletRequest request) {
         if(!request.getParameter(AttributeKeys.PASSWORD).equals(request.getParameter("repeatPass"))){
+            log.info("Passwords don't match");
             return Address.SIGNUP;
         }
         User user = User.builder()
@@ -31,9 +34,11 @@ public class Signup implements Command {
                 .role(Role.USER)
                 .build();
         userService.create(user);
+        log.info("User created");
         imageService.uploadImage(request, user.getImage());
         HttpSession session = request.getSession();
         session.setAttribute(AttributeKeys.USER, user);
+        log.info("Signup complete");
         return Address.PROFILE;
     }
 }

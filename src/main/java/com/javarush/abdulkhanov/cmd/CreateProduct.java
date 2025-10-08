@@ -10,12 +10,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-
+@Slf4j
 @SuppressWarnings("unused")
 @AllArgsConstructor
 public class CreateProduct implements Command {
@@ -38,13 +39,18 @@ public class CreateProduct implements Command {
                     .category(category)
                     .totalAmount(Long.parseLong(totalAmount))
                     .build());
+            log.info("Product created successfully");
         }
         Product product = productService.get(name, sku).orElseThrow(
-                () -> new ApplicationException("Product not found")
+                () -> {
+                    log.warn("Product with name {} and sku {} not found", name, sku);
+                    return new ApplicationException("Product not found");
+                }
         );
         req.setAttribute("product", product);
         Long productId = product.getId();
         imageService.uploadImage(req, product.getImage());
+        log.info("Product was created. Forwarded to fill parameters.");
         return Address.FILL_PRODUCT_PARAMETERS + "?category=" + category + "&storeId=" + storeId + "&productId=" + product.getId();
     }
 }

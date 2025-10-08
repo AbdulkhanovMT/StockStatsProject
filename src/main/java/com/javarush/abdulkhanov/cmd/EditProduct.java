@@ -10,13 +10,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-
+@Slf4j
 @SuppressWarnings("unused")
 @AllArgsConstructor
 public class EditProduct implements Command {
@@ -32,9 +33,13 @@ public class EditProduct implements Command {
         Optional<Product> optionalProduct = productService.get(id);
         optionalProduct.ifPresent(product -> req.setAttribute("product", product));
         Product currentProduct = optionalProduct
-                .orElseThrow(() -> new ApplicationException("Product was not found"));
+                .orElseThrow(() -> {
+                    log.warn("Product was not found with id {}", stringId);
+                    return new ApplicationException("Product was not found");
+                });
         Collection<ProductParameter> currentParameters = currentProduct.getParameters();
         req.setAttribute("parameters", currentParameters);
+        log.info("Product {} is ready to be edited", currentProduct.getId());
         return getView();
     }
 
@@ -49,6 +54,7 @@ public class EditProduct implements Command {
         Product product = buildProduct(req, id, currentProduct, parameters);
         productService.update(product);
         imageService.uploadImage(req, product.getImage());
+        log.info("New data was sent to storage");
         return Address.CARD + "?productId=" + product.getId();
     }
 

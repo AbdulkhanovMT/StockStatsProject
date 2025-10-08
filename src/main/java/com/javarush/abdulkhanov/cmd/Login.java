@@ -7,9 +7,11 @@ import com.javarush.abdulkhanov.utils.AttributeKeys;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Optional;
 
+@Slf4j
 @AllArgsConstructor
 public class Login implements Command {
 
@@ -23,8 +25,10 @@ public class Login implements Command {
         if (user.isPresent()) {
             HttpSession session = request.getSession();
             session.setAttribute(AttributeKeys.USER, user.get());
+            log.info("Login successful");
             return Address.PROFILE;
         } else {
+            log.info("Wrong access data");
             return Address.LOGIN;
         }
     }
