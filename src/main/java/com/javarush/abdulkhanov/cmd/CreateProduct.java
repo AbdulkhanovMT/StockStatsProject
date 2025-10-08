@@ -31,19 +31,20 @@ public class CreateProduct implements Command {
         String sku = req.getParameter("sku");
         String category = req.getParameter("category");
         String totalAmount = req.getParameter("totalAmount");
-        productService.create(Product.builder()
-                .name(name)
-                .sku(sku)
-                .category(category)
-                .totalAmount(Long.parseLong(totalAmount))
-                .build());
-        Product product = productService.get(name, sku).orElse(null);
-        if (product != null) {
-            req.setAttribute("product", product);
-            Long productId = product.getId();
-            imageService.uploadImage(req, product.getImage());
-            return Address.FILL_PRODUCT_PARAMETERS + "?category=" + category + "&storeId=" + storeId + "&productId=" + productId;
+        if(!(name.isBlank() || sku.isBlank() || category.isBlank() || totalAmount.isBlank())) {
+            productService.create(Product.builder()
+                    .name(name)
+                    .sku(sku)
+                    .category(category)
+                    .totalAmount(Long.parseLong(totalAmount))
+                    .build());
         }
-        return Address.CREATE_PRODUCT;
+        Product product = productService.get(name, sku).orElseThrow(
+                () -> new ApplicationException("Product not found")
+        );
+        req.setAttribute("product", product);
+        Long productId = product.getId();
+        imageService.uploadImage(req, product.getImage());
+        return Address.FILL_PRODUCT_PARAMETERS + "?category=" + category + "&storeId=" + storeId + "&productId=" + product.getId();
     }
 }

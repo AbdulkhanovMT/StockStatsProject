@@ -33,10 +33,10 @@ public class FillProductParameter implements Command {
         if (productId != null) {
             long id = Long.parseLong(productId);
             productService.get(id)
-                        .ifPresent(product -> {
-                            req.setAttribute("product", product);
-                            product.setParameters(parameters);
-                        });
+                    .ifPresent(product -> {
+                        req.setAttribute("product", product);
+                        product.setParameters(parameters);
+                    });
         }
         return getView();
     }
@@ -47,12 +47,14 @@ public class FillProductParameter implements Command {
         String storeId = req.getParameter("storeId");
         String stringId = req.getParameter("productId");
         long id = Long.parseLong(stringId);
-        Product product = productService.get(id).get();
-        if(Objects.isNull(product)){
+        Optional<Product> optional = productService.get(id);
+        if (optional.isEmpty()) {
             return Address.CREATE_PRODUCT;
         }
+        Product product = optional.get();
         Map<String, ProductParameter> parameters = fillProductParameterMap(req, product);
-        if(parameters.isEmpty()) {
+        if (parameters.isEmpty()) {
+            productService.delete(product);
             return Address.CREATE_PRODUCT;
         }
         Product createdProduct = Product.builder().id(id)
@@ -64,20 +66,19 @@ public class FillProductParameter implements Command {
                 .build();
         productService.update(createdProduct);
         Store store = storeService.get(Long.parseLong(storeId)).get();
-        List<Product> updatedList = new ArrayList<>();
-        updatedList.addAll(store.getProducts());
+        List<Product> updatedList = new ArrayList<>(store.getProducts());
         updatedList.add(createdProduct);
         store.setProducts(updatedList);
         return Address.CARD + "?productId=" + id;
     }
 
-    private static Map<String, ProductParameter> fillProductParameterMap(HttpServletRequest req, Product product) {
+    private Map<String, ProductParameter> fillProductParameterMap(HttpServletRequest req, Product product) {
         Map<String, ProductParameter> parameters = new HashMap<>();
         List<ProductParameter> currentParameters = (List<ProductParameter>) product.getParameters();
         if (currentParameters == null) {
             return parameters;
         }
-        for(ProductParameter p : currentParameters){
+        for (ProductParameter p : currentParameters) {
             parameters.put(p.getName(), p);
         }
         for (ProductParameter p : currentParameters) {

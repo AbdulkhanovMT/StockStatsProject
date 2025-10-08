@@ -10,6 +10,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
+import java.util.List;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -49,6 +51,7 @@ public class BaseIT {
                 .id(2L)
                 .login("testSeller")
                 .password("testSeller")
+                .sellerApiKeyList(List.of("1234"))
                 .role(Role.SELLER)
                 .build();
         testUser = User.builder()
@@ -61,7 +64,7 @@ public class BaseIT {
                 .id(4L)
                 .login("testGuest")
                 .password("testGuest")
-                .role(Role.USER)
+                .role(Role.GUEST)
                 .build();
     }
 }

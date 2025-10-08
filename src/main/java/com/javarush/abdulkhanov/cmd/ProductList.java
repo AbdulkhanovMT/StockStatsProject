@@ -19,7 +19,6 @@ public class ProductList implements Command {
     public String doGet(HttpServletRequest request) {
         if (request.getParameter("logout") == null) {
             HttpSession session = request.getSession();
-            User user = (User) session.getAttribute("user");
             session.setAttribute("products", productService.getAll());
             return Address.LIST_OF_PRODUCTS;
         } else {

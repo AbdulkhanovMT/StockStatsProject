@@ -14,6 +14,7 @@ import lombok.SneakyThrows;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 
 @SuppressWarnings("unused")
@@ -27,15 +28,13 @@ public class EditProduct implements Command {
     public String doGet(HttpServletRequest req) {
         String stringId = req.getParameter("productId");
         HttpSession session = req.getSession();
-        Product currentProduct = productService.get(Long.valueOf(stringId))
-                .orElseThrow(()->new ApplicationException("Product was not found"));
+        long id = Long.parseLong(stringId);
+        Optional<Product> optionalProduct = productService.get(id);
+        optionalProduct.ifPresent(product -> req.setAttribute("product", product));
+        Product currentProduct = optionalProduct
+                .orElseThrow(() -> new ApplicationException("Product was not found"));
         Collection<ProductParameter> currentParameters = currentProduct.getParameters();
         req.setAttribute("parameters", currentParameters);
-        if (stringId != null) {
-            long id = Long.parseLong(stringId);
-            productService.get(id)
-                    .ifPresent(product -> req.setAttribute("product", product));
-        }
         return getView();
     }
 
@@ -45,7 +44,25 @@ public class EditProduct implements Command {
         long id = Long.parseLong(req.getParameter("productId"));
         HttpSession session = req.getSession();
         Product currentProduct = productService.get(id)
-                .orElseThrow(()->new ApplicationException("Product was not found"));
+                .orElseThrow(() -> new ApplicationException("Product was not found"));
+        List<ProductParameter> parameters = getProductParameters(req, currentProduct);
+        Product product = buildProduct(req, id, currentProduct, parameters);
+        productService.update(product);
+        imageService.uploadImage(req, product.getImage());
+        return Address.CARD + "?productId=" + product.getId();
+    }
+
+    private static Product buildProduct(HttpServletRequest req, long id, Product currentProduct, List<ProductParameter> parameters) {
+        return Product.builder().id(id)
+                .name(currentProduct.getName())
+                .sku(currentProduct.getSku())
+                .category(currentProduct.getCategory())
+                .totalAmount(Long.valueOf(req.getParameter("totalAmount")))
+                .parameters(parameters)
+                .build();
+    }
+
+    private List<ProductParameter> getProductParameters(HttpServletRequest req, Product currentProduct) {
         Collection<ProductParameter> currentParameters = currentProduct.getParameters();
         List<ProductParameter> parameters = new ArrayList<>();
         for (ProductParameter p : currentParameters) {
@@ -55,15 +72,6 @@ public class EditProduct implements Command {
                     .build();
             parameters.add(parameter);
         }
-        Product product = Product.builder().id(id)
-                .name(currentProduct.getName())
-                .sku(currentProduct.getSku())
-                .category(currentProduct.getCategory())
-                .totalAmount(Long.valueOf(req.getParameter("totalAmount")))
-                .parameters(parameters)
-                .build();
-        productService.update(product);
-        imageService.uploadImage(req, product.getImage());
-        return Address.CARD + "?productId=" + product.getId();
+        return parameters;
     }
 }

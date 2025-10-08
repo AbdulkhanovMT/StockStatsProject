@@ -4,6 +4,7 @@ import com.javarush.abdulkhanov.entity.Role;
 import com.javarush.abdulkhanov.entity.User;
 import com.javarush.abdulkhanov.service.ImageService;
 import com.javarush.abdulkhanov.service.UserService;
+import com.javarush.abdulkhanov.utils.Address;
 import com.javarush.abdulkhanov.utils.AttributeKeys;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -25,8 +26,11 @@ public class EditProfile implements Command {
             long id = Long.parseLong(stringId);
             userService.get(id)
                     .ifPresent(user -> req.setAttribute(AttributeKeys.USER, user));
+            return getView();
+        } else{
+            return Address.PROFILE.substring(1);
         }
-        return getView();
+
     }
 
     @Override
@@ -41,7 +45,7 @@ public class EditProfile implements Command {
                 .name(req.getParameter(AttributeKeys.NAME))
                 .login(req.getParameter(AttributeKeys.LOGIN))
                 .password(req.getParameter(AttributeKeys.PASSWORD))
-                .role((currentRole==Role.ADMIN)?Role.valueOf(req.getParameter(AttributeKeys.ROLE)):currentRole)
+                .role((currentRole == Role.ADMIN) ? Role.valueOf(req.getParameter(AttributeKeys.ROLE)) : currentRole)
                 .build();
         userService.update(user);
         imageService.uploadImage(req, user.getImage());

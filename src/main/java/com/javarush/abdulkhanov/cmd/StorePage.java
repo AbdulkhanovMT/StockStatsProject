@@ -32,7 +32,7 @@ public class StorePage implements Command {
         Store store = storeService.get(storeId)
                 .orElseThrow(() -> new ApplicationException("Access denied or store was not found"));
         request.setAttribute("store", store);
-        if(userKeyList.contains(store.getAccessKey())){
+        if(userKeyList != null && userKeyList.contains(store.getAccessKey())){
             return Address.STORE_PAGE;
         }
         return Address.PROFILE;

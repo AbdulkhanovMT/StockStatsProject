@@ -32,13 +32,27 @@ class ProfileIT extends BaseIT {
     void doGetWhenUserIsSeller() {
         Mockito.when(request.getSession()).thenReturn(mockedSession);
         Mockito.when(mockedSession.getAttribute(AttributeKeys.USER)).thenReturn(testSeller);
-        Mockito.when(mockedSession.getAttribute("stores")).thenReturn((storeService.get(1L).get()));
-        Mockito.when(mockedSession.getAttribute("products")).thenReturn((storeService.get(1L).get().getProducts()));
-        Mockito.when(user.getSellerApiKeyList()).thenReturn(List.of(storeService.get(1L).get().getAccessKey()));
 
         String uri = profile.doGet(request);
         Assertions.assertEquals(Address.PROFILE.substring(1), uri);
-        Assertions.assertEquals(storeService.get(1L).get(), mockedSession.getAttribute("stores"));
-        Assertions.assertEquals(storeService.get(1L).get().getProducts(), mockedSession.getAttribute("products"));
+    }
+
+    @Test
+    void doGetWhenListOfUserStoreKeysIsNull() {
+        Mockito.when(request.getSession()).thenReturn(mockedSession);
+        Mockito.when(mockedSession.getAttribute(AttributeKeys.USER)).thenReturn(testUser);
+
+        String uri = profile.doGet(request);
+        Assertions.assertEquals(Address.PROFILE.substring(1), uri);
+    }
+
+    @Test
+    void doGetWhenLogout() {
+        Mockito.when(request.getSession()).thenReturn(mockedSession);
+        Mockito.when(mockedSession.getAttribute(AttributeKeys.USER)).thenReturn(testUser);
+        Mockito.when(request.getParameter("logout")).thenReturn("logout");
+
+        String uri = profile.doGet(request);
+        Assertions.assertEquals(Address.LOGOUT.substring(1), uri);
     }
 }
