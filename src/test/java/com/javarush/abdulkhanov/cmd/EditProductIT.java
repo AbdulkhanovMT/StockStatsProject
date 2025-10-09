@@ -5,6 +5,7 @@ import com.javarush.abdulkhanov.config.ServiceLocator;
 import com.javarush.abdulkhanov.exception.ApplicationException;
 import com.javarush.abdulkhanov.service.ProductService;
 import com.javarush.abdulkhanov.utils.Address;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -13,6 +14,7 @@ import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Slf4j
 class EditProductIT extends BaseIT {
 
     private final ProductService productService = ServiceLocator.find(ProductService.class);
@@ -20,6 +22,7 @@ class EditProductIT extends BaseIT {
 
     @Test
     void doGetWhenProductIdIsCorrect() {
+        log.info("EditProduct integration test");
         Mockito.when(request.getSession()).thenReturn(mockedSession);
         Mockito.when(request.getParameter("productId")).thenReturn("1");
 
@@ -29,6 +32,7 @@ class EditProductIT extends BaseIT {
 
     @Test
     void doGetWhenProductIsNotPresent() {
+        log.info("EditProduct integration test");
         Mockito.when(request.getSession()).thenReturn(mockedSession);
         Mockito.when(request.getParameter("productId")).thenReturn(Long.toString(Long.MAX_VALUE));
 
@@ -41,6 +45,7 @@ class EditProductIT extends BaseIT {
 
     @Test
     void doPostWhenProductIdIsCorrect() {
+        log.info("EditProduct integration test");
         String productId = "1";
         String productAmount = Objects.requireNonNull(productService
                         .get(Long.parseLong(productId))
@@ -58,6 +63,7 @@ class EditProductIT extends BaseIT {
 
     @Test
     void doPostWhenProductIsNotPresent() {
+        log.info("EditProduct integration test");
         Mockito.when(request.getParameter("productId")).thenReturn(Long.toString(Long.MAX_VALUE));
         Throwable exception = assertThrows(
                 ApplicationException.class,

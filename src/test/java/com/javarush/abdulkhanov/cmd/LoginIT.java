@@ -2,16 +2,15 @@ package com.javarush.abdulkhanov.cmd;
 
 import com.javarush.abdulkhanov.BaseIT;
 import com.javarush.abdulkhanov.config.ServiceLocator;
-import com.javarush.abdulkhanov.entity.User;
 import com.javarush.abdulkhanov.service.UserService;
 import com.javarush.abdulkhanov.utils.Address;
 import com.javarush.abdulkhanov.utils.AttributeKeys;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.util.Optional;
-
+@Slf4j
 class LoginIT extends BaseIT {
 
     Login login = ServiceLocator.find(Login.class);
@@ -19,6 +18,7 @@ class LoginIT extends BaseIT {
 
     @Test
     void doPostWhenUserIsPresent() {
+        log.info("Login IT doPostWhenUserIsPresent");
         String testLogin = "admin";
         String testPassword = "admin";
 
@@ -33,6 +33,7 @@ class LoginIT extends BaseIT {
 
     @Test
     void doPostWhenUserIsNotPresent() {
+        log.info("Login IT doPostWhenUserIsNotPresent");
         String testLogin = "testLogin";
         String testPassword = "testPassword";
 

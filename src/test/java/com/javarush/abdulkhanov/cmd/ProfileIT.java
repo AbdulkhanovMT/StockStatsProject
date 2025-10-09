@@ -6,12 +6,12 @@ import com.javarush.abdulkhanov.entity.User;
 import com.javarush.abdulkhanov.service.StoreService;
 import com.javarush.abdulkhanov.utils.Address;
 import com.javarush.abdulkhanov.utils.AttributeKeys;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.util.List;
-
+@Slf4j
 class ProfileIT extends BaseIT {
 
     Profile profile = ServiceLocator.find(Profile.class);
@@ -20,6 +20,7 @@ class ProfileIT extends BaseIT {
 
     @Test
     void doGetWhenUserIsAdmin() {
+        log.info("Profile IT doGetWhenUserIsAdmin");
         Mockito.when(request.getSession()).thenReturn(mockedSession);
         Mockito.when(mockedSession.getAttribute(AttributeKeys.USER)).thenReturn(testAdmin);
         Mockito.when(mockedSession.getAttribute("stores")).thenReturn((storeService.getAll()));
@@ -30,6 +31,7 @@ class ProfileIT extends BaseIT {
 
     @Test
     void doGetWhenUserIsSeller() {
+        log.info("Profile IT doGetWhenUserIsSeller");
         Mockito.when(request.getSession()).thenReturn(mockedSession);
         Mockito.when(mockedSession.getAttribute(AttributeKeys.USER)).thenReturn(testSeller);
 

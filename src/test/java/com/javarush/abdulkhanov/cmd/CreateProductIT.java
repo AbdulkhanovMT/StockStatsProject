@@ -7,12 +7,14 @@ import com.javarush.abdulkhanov.service.ProductService;
 import com.javarush.abdulkhanov.utils.Address;
 import com.javarush.abdulkhanov.utils.AttributeKeys;
 import com.javarush.abdulkhanov.utils.ProductCategory;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+@Slf4j
 class CreateProductIT extends BaseIT {
 
     private final ProductService productService = ServiceLocator.find(ProductService.class);
@@ -20,6 +22,7 @@ class CreateProductIT extends BaseIT {
 
     @Test
     void doPost() {
+        log.info("CreateProduct integration test");
         String storeId = "1";
         String name = "Fedor";
         String sku = "storeSku";
@@ -43,6 +46,7 @@ class CreateProductIT extends BaseIT {
 
     @Test
     void doPostWhenProductNotFound() {
+        log.info("CreateProduct integration test");
         String storeId = "1";
         String name = "";
         String sku = "";

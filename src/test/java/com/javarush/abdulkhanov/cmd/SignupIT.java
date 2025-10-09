@@ -5,10 +5,12 @@ import com.javarush.abdulkhanov.config.ServiceLocator;
 import com.javarush.abdulkhanov.service.UserService;
 import com.javarush.abdulkhanov.utils.Address;
 import com.javarush.abdulkhanov.utils.AttributeKeys;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+@Slf4j
 class SignupIT extends BaseIT {
 
     UserService userService = ServiceLocator.find(UserService.class);
@@ -16,6 +18,7 @@ class SignupIT extends BaseIT {
 
     @Test
     void doPostWhenPasswordConfirmed() {
+        log.info("Signup IT doPostWhenPasswordConfirmed");
         Mockito.when(request.getParameter(AttributeKeys.NAME)).thenReturn("testName");
         Mockito.when(request.getParameter(AttributeKeys.LOGIN)).thenReturn("testLogin");
         Mockito.when(request.getParameter(AttributeKeys.PASSWORD)).thenReturn("testPassword");
@@ -29,6 +32,7 @@ class SignupIT extends BaseIT {
 
     @Test
     void doPostWhenPasswordIncorrect() {
+        log.info("Signup IT doPostWhenPasswordIncorrect");
         Mockito.when(request.getParameter(AttributeKeys.NAME)).thenReturn("testName");
         Mockito.when(request.getParameter(AttributeKeys.LOGIN)).thenReturn("testLogin");
         Mockito.when(request.getParameter(AttributeKeys.PASSWORD)).thenReturn("testPassword");

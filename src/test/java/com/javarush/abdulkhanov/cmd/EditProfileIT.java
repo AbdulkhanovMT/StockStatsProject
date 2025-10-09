@@ -7,14 +7,12 @@ import com.javarush.abdulkhanov.entity.User;
 import com.javarush.abdulkhanov.service.UserService;
 import com.javarush.abdulkhanov.utils.Address;
 import com.javarush.abdulkhanov.utils.AttributeKeys;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-
+@Slf4j
 class EditProfileIT extends BaseIT {
 
     private final EditProfile editProfile = ServiceLocator.find(EditProfile.class);
@@ -22,6 +20,7 @@ class EditProfileIT extends BaseIT {
 
     @Test
     void doGet() {
+        log.info("GetProduct integration test");
         Mockito.when(request.getParameter(AttributeKeys.ID)).thenReturn(testAdmin.getId().toString());
 
         String uri = editProfile.doGet(request);
@@ -30,6 +29,7 @@ class EditProfileIT extends BaseIT {
 
     @Test
     void doGetWhenIdIsNull() {
+        log.info("GetProduct integration test");
         Mockito.when(request.getParameter(AttributeKeys.ID)).thenReturn(null);
 
         String uri = editProfile.doGet(request);
@@ -38,6 +38,7 @@ class EditProfileIT extends BaseIT {
 
     @Test
     void doGetWhenIdIsPresent() {
+        log.info("GetProduct integration test");
         Mockito.when(request.getParameter(AttributeKeys.ID)).thenReturn("1");
 
         String uri = editProfile.doGet(request);
@@ -46,6 +47,7 @@ class EditProfileIT extends BaseIT {
 
     @Test
     void doPost() {
+        log.info("CreateProduct integration test");
         String id = testUser.getId().toString();
         Mockito.when(request.getParameter(AttributeKeys.ID)).thenReturn(id);
         Mockito.when(request.getSession()).thenReturn(mockedSession);
@@ -68,6 +70,7 @@ class EditProfileIT extends BaseIT {
 
     @Test
     void doPostForAdmin() {
+        log.info("CreateProduct integration test");
         String id = testAdmin.getId().toString();
         Mockito.when(request.getParameter(AttributeKeys.ID)).thenReturn(id);
         Mockito.when(request.getSession()).thenReturn(mockedSession);

@@ -6,12 +6,14 @@ import com.javarush.abdulkhanov.entity.User;
 import com.javarush.abdulkhanov.service.StoreService;
 import com.javarush.abdulkhanov.utils.Address;
 import com.javarush.abdulkhanov.utils.AttributeKeys;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.util.List;
 
+@Slf4j
 class StorePageIT extends BaseIT {
 
     StoreService storeService = Mockito.mock(StoreService.class);
@@ -19,6 +21,7 @@ class StorePageIT extends BaseIT {
 
     @Test
     void doGetWhenUserIsSellerOrAdmin() {
+        log.info("StorePage IT doGetWhenUserIsSellerOrAdmin");
         Mockito.when(request.getSession()).thenReturn(mockedSession);
         Mockito.when(mockedSession.getAttribute(AttributeKeys.USER)).thenReturn(testSeller);
         Mockito.when(request.getParameter("storeId")).thenReturn("1");
@@ -29,6 +32,7 @@ class StorePageIT extends BaseIT {
 
     @Test
     void doGetWhenUserIsWrongSeller() {
+        log.info("StorePage IT doGetWhenUserIsWrongSeller");
         User marketSpy = Mockito.mock(User.class);
         Mockito.when(marketSpy.getSellerApiKeyList()).thenReturn(List.of("wrongPass"));
         Mockito.when(request.getSession()).thenReturn(mockedSession);
@@ -41,6 +45,7 @@ class StorePageIT extends BaseIT {
 
     @Test
     void doGetWhenUserIsNotSellerOrAdmin() {
+        log.info("StorePage IT doGetWhenUserIsNotSellerOrAdmin");
         Mockito.when(request.getSession()).thenReturn(mockedSession);
         Mockito.when(mockedSession.getAttribute(AttributeKeys.USER)).thenReturn(testUser);
         Mockito.when(request.getParameter("storeId")).thenReturn("1");
